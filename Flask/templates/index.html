@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="static/js/application.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+
+
+
+    <style>
+
+    .flex-container {
+    display: flex;
+    flex-direction: row;
+    }
+    .title
+    {
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      text-align: center;
+      width:7000px;
+      color:#fff;
+    }
+    button {
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      border-radius: 4px;
+      font-size: 30px;
+      color: #FFF;
+      background-color: #008CBA;
+    }
+
+    #wrapper {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+  table, th, td {
+      max-width:100%;
+      white-space:nowrap;
+      width: auto !important;
+      text-align:center;
+      font-size: 18px;
+  }
+
+
+    </style>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<body style="background-color:white">
+<div class="container" style="color:#5dbcd2">
+  <div class="jumbotron flex-container" style="background-color:#5dbcd2">
+  <h1 class="title" style="text-align:center; color:#fff">GroupMe Analysis</h1>
+  </div>
+</div>
+</div>
+<div>
+<p> testing 1 2 3.</p>
+<div id="wrapper"><button type="button" onclick="myFunc()">Analyze Groups</button></div>
+
+</div>
+<!--script to redirect to another webpage-->
+      <script>
+         function myFunc() {
+           window.location.href="https://oauth.groupme.com/oauth/authorize?client_id=QPxdELJCSu9MceJ1x8xFac9SKhfYV93Kv8hn7Jwtp57AhRQE";
+         }
+      </script>
+</body>
+</html>

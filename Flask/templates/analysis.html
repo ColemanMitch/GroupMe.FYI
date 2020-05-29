@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="static/js/application.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+
+
+    <style>
+
+    .flex-container {
+    display: flex;
+    flex-direction: row;
+    }
+    .title
+    {
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      text-align: center;
+      width:7000px;
+      color:#fff;
+    }
+    button {
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      border-radius: 4px;
+      font-size: 30px;
+      color: #FFF;
+      background-color: #008CBA;
+    }
+
+    #wrapper {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+  table, th, td {
+      max-width:100%;
+      white-space:nowrap;
+      width: auto !important;
+      text-align:center;
+      font-size: 18px;
+  }
+
+
+    </style>
+
+
+</head>
+<body style="background-color:white">
+<div class="container" style="color:#5dbcd2">
+  <div class="jumbotron flex-container" style="background-color:#5dbcd2">
+  <h2 class="title" style="text-align:center; color:#fff">GroupMe Analysis - {{ group_name }}</h2>
+  </div>
+</div>
+
+<article class="media content-section">
+         <div class="media-body">
+           <div class="article-metadata">
+           </div>
+           <center><h4><a class="article-title">Total Comments</a></h4><center
+           <center><div>{{ group_stats.total_comments }}</div></center>
+
+         </div>
+</article>
+<article class="media content-section">
+         <div class="media-body">
+           <div class="article-metadata">
+           </div>
+           <center><h4><a class="article-title">Total Likes</a></h4><center
+           <center><div>{{ group_stats.total_likes }}</div></center>
+
+         </div>
+</article>
+<article class="media content-section">
+         <div class="media-body">
+           <div class="article-metadata">
+           </div>
+           <center><h4><a class="article-title">Total Participants</a></h4><center
+           <center><div>{{ group_stats.num_participants }}</div></center>
+
+         </div>
+</article>
+<article class="media content-section">
+         <div class="media-body">
+           <div class="article-metadata">
+           </div>
+           <center><h4><a class="article-title">Average Likes / Message</a></h4><center
+           <center><div>{{  "%.2f"|format(group_stats.avg_likes_per_msg) }}</div></center>
+
+         </div>
+</article>
+
+
+<article class="media content-section">
+         <div class="media-body">
+           <div class="article-metadata">
+           </div>
+           <center><h4><a class="article-title" href="#"> Most Liked Message</a></h4><center>
+           {% if best_msg_attchmnt %}
+           <center><div>"{{ best_msg.message }}" - {{ best_msg.messager }}</div></center>
+           <center><img src= {{ best_msg.attachments[0].url }}  width=25%><center>
+           {% else %}
+             <center><div>"{{ best_msg.message }}" - {{ best_msg.messager }}</div></center>
+           {% endif %}
+         </div>
+</article>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+
+</body>
+</html>
