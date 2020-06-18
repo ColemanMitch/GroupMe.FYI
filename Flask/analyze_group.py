@@ -5,26 +5,17 @@ import requests
 import json
 import datetime as dt
 from login import login
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
-gm_msgs, gm_likes, gm_users, gm_users_id, gm_created_at, gm_favorited_by, gm_attachments = [], [], [], [], [], [], []
+members_df = pd.DataFrame(columns = ["User ID", "Nickname"])
 
-
-def get_group(group_id, client):
-    group_to_analyze = client.groups.get(group_id)
-    member_list = group_to_analyze.members
-
-    user_ids = []
-    nicknames = []
-
-    for member in member_list:
-        print(member)
-        user_ids.append(member.user_id)
-        nicknames.append(member.nickname)
+gm_msgs, gm_likes, gm_users, gm_users_id, gm_created_at, gm_favorited_by, gm_attachments, gm_user_pic = [], [], [], [], [], [], [], []
 
 def scrape_messages(group_id, token):
 
-    gm_msgs, gm_likes, gm_users, gm_users_id, gm_created_at, gm_favorited_by, gm_attachments = [], [], [], [], [], [], []
+    gm_msgs, gm_likes, gm_users, gm_users_id, gm_created_at, gm_favorited_by, gm_attachments, gm_user_pic = [], [], [], [], [], [], [], []
 
 
     url = "https://api.groupme.com/v3/groups/"+str(group_id)+"/messages?token="+str(token)#9429f5a055c30138f03c768570a6045f"
@@ -33,11 +24,6 @@ def scrape_messages(group_id, token):
     response = requests.get(url, params=urlData)
     res_js = None
     messages = None
-
-    client = login(token)
-    group_members = client.groups.get(group_id).members
-    print(group_members)
-
 
     try:
       while response.status_code != 304:
@@ -53,10 +39,11 @@ def scrape_messages(group_id, token):
           gm_created_at.append(messages[i]['created_at'])
           gm_favorited_by.append(messages[i]['favorited_by'])
           gm_attachments.append(messages[i]['attachments'])
+          gm_user_pic.append(messages[i]['avatar_url'])
         #print(json_formatted_str)
     except:
         json_formatted_str = json.dumps(res_js, indent=5)
-        df = pd.DataFrame(columns=["User ID", "Nickname","Message", "Attachments","Time Stamp", "Number of Likes", "Liked By"])
+        df = pd.DataFrame(columns=["User ID", "Nickname","Message", "Attachments","Time Stamp", "Number of Likes", "Liked By", "User Avatar"])
 
         df["Message"]=gm_msgs
         df["Attachments"]= gm_attachments
@@ -65,14 +52,27 @@ def scrape_messages(group_id, token):
         df["Time Stamp"] = gm_created_at
         df["Nickname"] = gm_users
         df["Liked By"] = gm_favorited_by
+        df["User Avatar"] = gm_user_pic
 
-        for i in range(len(gm_created_at)):
-            gm_created_at[i] = dt.datetime.fromtimestamp(gm_created_at[i]).strftime('%c')
+        client = Client.from_token(token)
+        group_to_analyze = client.groups.get(group_id)
+        member_list = group_to_analyze.members
 
-        df["Datetime"] = gm_created_at
+        user_ids = []
+        nicknames = []
+
+        for member in member_list:
+            print(member)
+            user_ids.append(member.user_id)
+            nicknames.append(member.nickname)
+
+        df_members = pd.DataFrame(columns = ["User ID", "Nickname"])
+        df_members["User ID"] = user_ids
+        df_members["Nickname"] = nicknames
+
         print("Done")
 
-        return df
+        return df, df_members
 
 
 def best_msg(df):
@@ -88,8 +88,20 @@ def best_msg(df):
     print(best_msg)
     return best_msg
 
-def total_group_stats(df):
+def total_group_stats(df, df_members):
     # TO DO, TOTAL COMMENTS, LIKES, MEMBERS
+
+    print(df_members)
+
+    user_ids = df['User ID'].unique().tolist()
+    print(user_ids)
+
+    for i in user_ids:
+        if i not in df_members['User ID'].values:
+            df_members.append({'user ID' : i } , ignore_index=True)
+
+    print(df_members)
+
     idx = df.groupby(['User ID'])['Time Stamp'].transform(max) == df['Time Stamp']
     df[idx].sort_values(by=['Time Stamp'], ascending=False)
 
@@ -99,13 +111,13 @@ def total_group_stats(df):
     df_likes_comments.sort_values(by=['Average Likes'], ascending=False)
 
 
-    df_members = pd.DataFrame(columns = ["User ID", "Nickname"])
-    df_members["User ID"] = df[idx]["User ID"]
-    df_members["Nickname"] = df[idx]["Nickname"]
-    df_members = df_members.drop_duplicates()
+    #df_members = pd.DataFrame(columns = ["User ID", "Nickname"])
+    #df_members["User ID"] = df[idx]["User ID"]
+    #df_members["Nickname"] = df[idx]["Nickname"]
 
-
-
+    #df_members = df_members.drop_duplicates()
+    print('df_members')
+    print(df_members)
 
 
     df_avg_likes = pd.merge(df_likes_comments, df_members, on='User ID', how='left').sort_values(by=['Average Likes'], ascending=False)
@@ -129,25 +141,129 @@ def total_group_stats(df):
 
     num_participants = len((df_avg_likes))
 
-    best_ratio_user = { 'nickname': df_avg_likes.iloc[0]['Nickname'], 'ratio': df_avg_likes.iloc[0]['Average Likes/Comment']}
-    chattiest_user = { }
+    best_ratio_user = {'nickname': df_avg_likes.iloc[0]['Nickname'], 'ratio': df_avg_likes.iloc[0]['Average Likes/Comment']}
+    df_avg_likes.sort_values(by=['Comments Count'], ascending=False, inplace=True)
+    #print(df_avg_likes)
+    chattiest_user = {'nickname': df_avg_likes.iloc[0]['Nickname'], 'num_comments': df_avg_likes.iloc[0]['Comments Count']}
+    df_avg_likes.sort_values(by=['Total Likes'], ascending=False, inplace=True)
+    most_liked_user = {'nickname': df_avg_likes.iloc[0]['Nickname'], 'num_likes': df_avg_likes.iloc[0]['Total Likes']}
 
-    # total_comments = df_avg_likes.query("User ID not in ['calendar', 'system']")['Comments count'].sum()
-    #print(total_comments)
-    #total_members = df['User ID'].value_counts()
+    df_likes_given = df_members.copy()
+    df_likes_given['Likes Given'] = 0
+    df_likes_given['Self Likes'] = 0
+    gm_favorited_by = df['Liked By'].tolist()
+    gm_users_id = df['User ID'].tolist()
+
+    for j, k in  zip(gm_favorited_by, gm_users_id):
+      for i in j:
+        df_likes_given.loc[df_likes_given["User ID"] == i, 'Likes Given']+=1
+        if (k == i):
+          df_likes_given.loc[df_likes_given["User ID"] == i, 'Self Likes']+=1
+
+
+
+    df_likes_given.sort_values(by=['Likes Given'], ascending=False, inplace=True)
+    most_likes_given_user = {'nickname': df_likes_given.iloc[0]['Nickname'], 'likes_given': df_likes_given.iloc[0]['Likes Given']}
+    df_likes_given.sort_values(by=['Self Likes'], ascending=False, inplace=True)
+
+    most_self_likes_user = {'nickname': df_likes_given.iloc[0]['Nickname'], 'self_likes': df_likes_given.iloc[0]['Self Likes']}
+    print(df_likes_given)
+
+
+    ## Mentions
+
+    df_mentions = df_members.copy()
+    df_mentions['Times Mentioned'] = 0
+    df_mentions['Times Mentioning Others'] = 0
+    mentions = []
+
+    for a in df['Attachments'].tolist():
+      if len(a) >=1 and a[0]['type'] == 'mentions' :
+        mentions.append(a[0]['user_ids'])
+
+
+    for m in mentions:
+      for n in m:
+          df_mentions.loc[df_mentions["User ID"] == n, 'Times Mentioned']+=1
+
+    print(df_mentions)
+    most_mentioned_user = {'nickname': df_mentions.iloc[0]['Nickname'], 'times_mentioned': df_mentions.iloc[0]['Times Mentioned']}
+
+
+    ## Likes Matrix
+
+    ids = df_members['User ID'].to_list()
+    if 'calendar' in ids:
+      ids.remove('calendar')
+    if 'system' in ids:
+        ids.remove('system')
+    names = df_members['Nickname'].to_list()
+    if 'GroupMe' in names:
+        names.remove('GroupMe')
+    if 'GroupMe Calendar' in names:
+      names.remove('GroupMe Calendar')
+
+    ids_names_dict = {ids[i]: names[i] for i in range(len(names))}
+    print(ids_names_dict)
+
+
+    likes_matrix = df_members.copy()
+    for i in likes_matrix['User ID'].tolist():
+        likes_matrix[i] = 0
+
+    gm_users_id = df["User ID"].tolist()
+    gm_favorited_by = df["Liked By"].tolist()
+
+    for fb, i in  zip(gm_favorited_by, gm_users_id):
+        for f in fb:
+            likes_matrix.loc[likes_matrix['User ID'] == i, f]+=1
+    if 'system' in likes_matrix.columns:
+        likes_matrix.drop(['system'], axis=1, inplace=True)
+    if 'calendar' in likes_matrix.columns:
+        likes_matrix.drop(['calendar'], axis=1, inplace=True)
+
+    for column in likes_matrix[ids]:
+        likes_matrix.rename(columns={column: ids_names_dict[column]}, inplace=True)
+
+    likes_matrix.drop(likes_matrix[likes_matrix['Nickname'] == 'GroupMe'].index, axis=0, inplace=True)
+    likes_matrix.drop(likes_matrix[likes_matrix['Nickname'] == 'GroupMe Calendar'].index, axis=0, inplace=True)
+
+    likes_matrix.drop(['User ID'], axis=1, inplace=True)
+    likes_matrix.set_index('Nickname', inplace=True)
+
+    #plt.figure(figsize=(10, 10))
+    #plt.savefig(img, format='png')
+
+    #ax = sns.heatmap(likes_matrix, annot=True, fmt='d', cmap="YlGnBu")
+    #ax.set(xlabel='Likes Given', ylabel='Likes Recieved')
+    #plt.savefig('/static/images/new_plot.png')
+
+    print(likes_matrix)
 
 
     total_stats  = {
-                    'total_comments': total_user_comments,
-                    'total_likes': total_user_likes,
-                    'num_participants': num_participants,
-                    'avg_likes_per_msg': total_user_likes/total_user_comments
+                    'total_comments' : total_user_comments,
+                    'total_likes' : total_user_likes,
+                    'num_participants' : num_participants,
+                    'avg_likes_per_msg' : total_user_likes/total_user_comments
                     }
-    superaltive_members = {}
+    superaltive_members = {
+                    'chattiest_user' : chattiest_user,
+                    'best_ratio_user' : best_ratio_user,
+                    'most_liked_user' : most_liked_user,
+                    'most_likes_given_user' : most_likes_given_user,
+                    'most_mentioned_user' : most_mentioned_user,
+                    'most_self_likes_user': most_self_likes_user
+                    }
+
+
+
     print('Number of total likes', total_user_likes)
     print('Number of total comments', total_user_comments)
     print('Member with the best comments on average is', best_ratio_user['nickname'] ,
                 'with an average of', best_ratio_user['ratio'], 'likes for every comment')
 
-    return total_stats
+    print('Member with the most comments on average is', chattiest_user['nickname'] ,
+                'with total of ', chattiest_user['num_comments'], ' comments')
+    return total_stats, superaltive_members, likes_matrix
     #print("Number of members likes", total_members)

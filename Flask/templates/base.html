@@ -1,82 +1,94 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-    <script src="static/js/application.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+  <!DOCTYPE html>
+  <html>
+  <head>
+      <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+      <script src="static/js/application.js"></script>
+      <link rel="stylesheet" type="text/css" href="style.css">
 
 
 
 
-    <style>
+      <style>
 
-    .flex-container {
-    display: flex;
-    flex-direction: row;
-    }
-    .title
-    {
-      flex-direction: column;
+      .flex-container {
+      display: flex;
+      flex-direction: row;
+      }
+      .title
+      {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        text-align: center;
+        width:7000px;
+        color:#fff;
+      }
+      button {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        border-radius: 4px;
+        font-size: 30px;
+        color: #FFF;
+        background-color: #008CBA;
+      }
+
+      #wrapper {
+      width: 100%;
+      height: 300px;
+      display: flex;
+      align-items: center;
       justify-content: center;
-      text-align: center;
-      text-align: center;
-      width:7000px;
-      color:#fff;
-    }
-    button {
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-      border-radius: 4px;
-      font-size: 30px;
-      color: #FFF;
-      background-color: #008CBA;
+      }
+
+    table, th, td {
+        max-width:100%;
+        white-space:nowrap;
+        width: auto !important;
+        text-align:center;
+        font-size: 18px;
     }
 
-    #wrapper {
-    width: 100%;
-    height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    }
 
-  table, th, td {
-      max-width:100%;
-      white-space:nowrap;
-      width: auto !important;
-      text-align:center;
-      font-size: 18px;
-  }
+      </style>
+
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  </head>
+  <body style="background-color:white">
+
+    <div class="jumbotron jumbotron-fluid" style="background-color:#5dbcd2" width=100%>
+      <div class="container" style="color:#5dbcd2">
+        <h1 class="display" style="text-align:center; color:#fff">GroupMe.FYI</h1>
+      </div>
+    </div>
 
 
-    </style>
-
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-</head>
-<body style="background-color:white">
-<div class="container" style="color:#5dbcd2">
-  <div class="jumbotron flex-container" style="background-color:#5dbcd2">
-  <h1 class="title" style="text-align:center; color:#fff">GroupMe Analysis</h1>
-  </div>
-</div>
-<div class="table-responsive">
-<table class="table table-borderless table-responsive table-hover" style="margin-left:auto;margin-right:auto;" >
-  <tr>
-    <th style="text-align:center;"> Group Name </th>
-    <th style="text-align:center;"> Group ID </th>
-    <th style="text-align:center;">Analyze</th>
-  </tr>
-  {% for group in groups%}
-  <tr>
+  <div class="table-responsive">
+  <table class="table table-borderless table-responsive table-hover" style="margin-left:auto;margin-right:auto;" >
+    <tr>
+      <th style="text-align:center;">  </th>
+      <th style="text-align:center;"> Group Name </th>
+      <th style="text-align:center;"> Group ID </th>
+      <th style="text-align:center;">Analyze</th>
+    </tr>
+    {% for group in groups%}
+    <tr>
+      {% if (group.image_url == None)%}
+        <td> &nbsp; <img src="https://img.favpng.com/4/15/25/groupme-logo-messaging-apps-business-android-png-favpng-2uvHRG2rXRgZLnQm9kw7xsjSy.jpg" height=80px ></td>
+        <td> &nbsp; {{ group.name }} &nbsp; </td>
+        <td> &nbsp; {{ group.group_id }} &nbsp;  </td>
+        <td><a href="{{url_for('analyze',group_id=group.group_id, group_name=group.name, token=token)}}"><button style="color:white;"> Click to analyze! </button><href><td>
+      {% else %}
+      <td> &nbsp; <img src={{ group.image_url }} height=80px></td>
       <td> &nbsp; {{ group.name }} &nbsp; </td>
       <td> &nbsp; {{ group.group_id }} &nbsp;  </td>
       <td><a href="{{url_for('analyze',group_id=group.group_id, group_name=group.name, token=token)}}"><button style="color:white;"> Click to analyze! </button><href><td>
-  </tr>
-  {% endfor %}
-  </table>
-  </div>
-</body>
-</html>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    </table>
+    </div>
+  </body>
+  </html>
