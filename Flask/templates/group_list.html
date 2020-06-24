@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="static/js/application.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+
+
+
+    <style>
+
+
+
+    .flex-container {
+    display: flex;
+    flex-direction: row;
+    }
+    .title
+    {
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      text-align: center;
+      width:7000px;
+      color:#fff;
+    }
+    button {
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      border-radius: 4px;
+      font-size: 30px;
+      color: #FFF;
+      background-color: #008CBA;
+    }
+
+    #wrapper {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+
+
+  table{
+      max-width:100%;
+      text-align:center;
+      width: auto !important;
+      font-size: 18px;
+      table-layout: fixed;
+  }
+
+  th, td{
+    font-size: 14px;
+    word-wrap:break-word
+  }
+
+    </style>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<body style="background-color:white">
+
+  <div class="jumbotron jumbotron-fluid" style="background-color:#5dbcd2" width=100%>
+    <div class="container" style="color:#5dbcd2">
+      <h1 class="display" style="text-align:center; color:#fff">GroupMe.FYI</h1>
+    </div>
+  </div>
+
+<center>
+<div class="table-responsive">
+<table class="table table-borderless table-responsive table-hover" style=";margin-left:auto;margin-right:auto; width: 100%" >
+  <tr>
+    <th style="text-align:left;">  </th>
+    <th style="text-align:left;"> Group Name</th>
+    <th style="text-align:left;"> Most Recent Message </th>
+    <th style="text-align:left;"> Last Updated</th>
+    <th style="text-align:center;">Message Count</th>
+    <th style="text-align:left;"> </th>
+  </tr>
+  {% for i in group_details%}
+  <tr>
+      {% if (i.image_url == None)%}
+      <td> &nbsp; <img src=static/images/groupme-group.png height=80px ></td>
+      {% else %}
+      <td> &nbsp; <img src={{ i.image_url }} height=80px ></td>
+      {% endif %}
+      <td style="text-align:left;max-width:175px"><b>{{ i.name }}</b></td>
+      <td style="text-align:left;max-width: 400px;word-wrap: break-word;" align=right> {{ i.messages.preview.text }} </td>
+      <td style="text-align:left;min-width:250px;word-wrap: break-word;"> {{ i.messages.last_message_created_at| ctime}}</td>
+      <td style="text-align:center;min-width:75px;word-wrap: break-word;"> {{ i.messages.count}}</td><center>
+      <td><a href="{{url_for('analyze',group_id=i.id, group_name=i.name, token=token)}}"><button style="color:white;"> Click to analyze! </button><href><td>
+  {% endfor %}
+  </table>
+  </div>
+</center>
+</body>
+</html>

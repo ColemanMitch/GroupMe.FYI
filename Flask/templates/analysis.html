@@ -119,6 +119,7 @@
         <div class="well">
           <center>
             <u><h3>Chattiest Member</h3></u>
+            <img src={{superlative_members.chattiest_user.url}} width = 200px></a>
             <center>
               <h3>{{ superlative_members.chattiest_user.nickname }} with {{ superlative_members.chattiest_user.num_comments}} comments</h3>
             </center>
@@ -128,6 +129,7 @@
           <div class="well">
             <center>
               <u><h3>Best Ratio</h3></u>
+              <img src={{superlative_members.best_ratio_user.url}} width = 200px></a>
               <center>
                 <h3>{{ superlative_members.best_ratio_user.nickname }} with an average of {{ "%.2f"|format(superlative_members.best_ratio_user.ratio)}} likes/comment</h3>
               </center>
@@ -142,6 +144,7 @@
             <div class="well">
               <center>
                 <u><h3>Most Likes Received</h3></u>
+                <img src={{superlative_members.most_liked_user.url}} width = 200px></a>
                 <center>
                   <h3>{{ superlative_members.most_liked_user.nickname }} with {{ superlative_members.most_liked_user.num_likes}} likes received</h3>
                 </center>
@@ -151,6 +154,7 @@
               <div class="well">
                 <center>
                   <u><h3>Most Likes Given</h3></u>
+                  <img src={{superlative_members.most_likes_given_user.url}} width = 200px></a>
                   <center>
                     <h3>{{ superlative_members.most_likes_given_user.nickname }} with {{ superlative_members.most_likes_given_user.likes_given }} likes given</h3>
                   </center>
@@ -165,6 +169,8 @@
                 <div class="well">
                   <center>
                     <u><h3>Most Times Mentioned</h3></u>
+                    <img src={{superlative_members.most_mentioned_user.url}} width = 200px></a>
+
                     <center>
                       {% if (superlative_members.most_mentioned_user.times_mentioned == 1)%}
                       <h3>{{ superlative_members.most_mentioned_user.nickname  }} with {{ superlative_members.most_mentioned_user.times_mentioned }} mention</h3>
@@ -180,6 +186,8 @@
                   <div class="well">
                     <center>
                       <u><h3>Most Self Likes</h3></u>
+                      <img src={{superlative_members.most_self_likes_user.url}} width = 200px></a>
+
                       <center>
                         {% if (superlative_members.most_self_likes_user.self_likes == 1)%}
                         <h3>{{ superlative_members.most_self_likes_user.nickname }} with {{ superlative_members.most_self_likes_user.self_likes }} self like</h3>
@@ -221,8 +229,8 @@
                             </div>
                             <div class="col-1"></div>
                           </div>
-                          
-                          <center><img src= {{ plot_url }} width =50%><center>
+
+                          <center><img src= {{ plot_url }} width =70%><center>
 
 
 

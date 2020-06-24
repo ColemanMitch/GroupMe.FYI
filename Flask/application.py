@@ -13,7 +13,7 @@ import json
 import pprint
 import pandas as pd
 from pandas import DataFrame as df
-import datetime
+import datetime as dt
 from datetime import timezone
 import time
 import numpy as np
@@ -23,7 +23,9 @@ from login import login
 from analyze_group import *
 import seaborn as sns
 from io import StringIO
+import dateutil.parser
 import base64
+import babel
 
 
 #
@@ -36,6 +38,10 @@ app = Flask(__name__)
 def base():
     return render_template('index.html')
 
+@app.template_filter('ctime')
+def timectime(s):
+    return time.strftime("%A, %B %-m, %Y %-I:%M %p", time.localtime(s))
+
 @app.route('/groups_list')
 def list_groups():
     token = request.args.get('access_token')
@@ -44,9 +50,18 @@ def list_groups():
     print('client = ',client)
     print('token = ', token)
 
+    url = "https://api.groupme.com/v3/groups?token="+str(token)
+    urlData = {'per_page':500}
+    response = requests.get(url, params=urlData)
+    res_js = json.loads(response.text)
+    group_details = res_js['response']
+
+    #print(group_details)
+
     groups = client.groups.list_all()
     group_id = ''
-    return render_template('base.html', groups = groups,
+    return render_template('group_list.html', groups = groups,
+                                        group_details = group_details,
                                         token = token)
 
 @app.route('/analyze')
@@ -57,11 +72,11 @@ def analyze():
     group_name = request.args.get('group_name')
 
     #df_group = pd.DataFrame()
-    df_group, df_members = scrape_messages(group_id, token)
+    df_group, all_users_df = scrape_messages(group_id, token)
 
     print(df_group)
     #<center><img src={{ best_msg.attachments[0].url }}><center>
-    print(df_members)
+    print(all_users_df)
     # best comment
     best_msg_dict = best_msg(df_group)
     best_msg_attchmnt = 0
@@ -78,11 +93,11 @@ def analyze():
 
 
 
-    total_group_stats_dict, superlative_members, likes_matrix = total_group_stats(df_group, df_members)
+    total_group_stats_dict, superlative_members, likes_matrix = total_group_stats(df_group, all_users_df)
 
     #img = io.BytesIO()
     #sns.set_style(xlabel='Likes Given', ylabel='Likes Recieved')
-    plt.figure(figsize=(15, 15))
+    plt.figure(figsize=(25, 25))
 
     with sns.plotting_context(font_scale=5):
         ax = sns.heatmap(likes_matrix, annot=True, fmt='d', cmap="YlGnBu")
@@ -93,9 +108,9 @@ def analyze():
     #st = dt.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
 
-    dt = datetime.datetime.now()
+    ts = dt.datetime.now()
 
-    utc_time = dt.replace(tzinfo = timezone.utc)
+    utc_time = ts.replace(tzinfo = timezone.utc)
     utc_timestamp = utc_time.timestamp()
 
     plot_url = 'static/images/'+str(group_id)+'_'+str(utc_timestamp)+'_plot.png'
