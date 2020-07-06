@@ -4,7 +4,6 @@
   <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
   <script src="static/js/application.js"></script>
-  <link rel="stylesheet" type="text/css" href="style.css">
 
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -18,7 +17,11 @@
   <style>
 
 
-
+  .group-img {
+    object-fit: cover;
+    width: 280px;
+    height: 280px;
+  }
 
   .flex-container {
     display: flex;
@@ -59,6 +62,10 @@
     font-size: 18px;
   }
 
+  .group-row {
+    display: flex; /* equal height of the children */
+    flex-wrap: wrap;
+  }
 
   </style>
 
@@ -74,10 +81,8 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-1"></div>
-
-      <div class="col">
+    <div class="group-row">
+      <div class="col-xs-6 col-sm-6 col-lg-3">
         <div class="well">
           <center>
             <u><h4>Total Participants</h4></u>
@@ -85,24 +90,24 @@
           </center>
         </div>
       </div>
-      <div class="col">
+      <div class="col-xs-6 col-sm-6 col-lg-3">
         <div class="well">
           <center>
             <u><h4>Total Comments</h4></u>
-            <h2>{{ group_stats.total_comments}}</h2>
+            <h2>{{ group_stats.total_comments | numberFormat}}</h2>
           </center>
         </div>
       </div>
 
-      <div class="col">
+      <div class="col-xs-6 col-sm-6 col-lg-3">
         <div class="well">
           <center>
             <u><h4>Total Likes</h4></u>
-            <h2>{{ group_stats.total_likes}}</h2>
+            <h2>{{ group_stats.total_likes | numberFormat}}</h2>
           </center>
         </div>
       </div>
-      <div class="col">
+      <div class="col-xs-6 col-sm-6 col-lg-3">
         <div class="well">
           <center>
             <u><h4>Average Likes/Message</h4></u>
@@ -110,136 +115,150 @@
           </center>
         </div>
       </div>
-      <div class="col-1"></div>
     </div>
+
+    <div class="container">
+
+      <!-- Team Member 1 -->
+      <div class = "group-row">
+        <div class="col-xs-12 col-s-12 col-md-6 col-lg-4">
+          <div class="card border-0 shadow">
+            <center>
+              <img class="group-img" src={{superlative_members.chattiest_user.url}}  alt="...">
+            </center>
+            <div class="card-body text-center">
+              <h4 class="card-title mb-0">Chattiest Member</h4>
+              <div class="card-text text-black-50">{{ superlative_members.chattiest_user.nickname }} with {{ superlative_members.chattiest_user.num_comments | numberFormat }} comments</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-s-12 col-md-6 col-lg-4">
+          <div class="card border-0 shadow">
+            <center>
+              <img class="group-img" src={{superlative_members.best_ratio_user.url}} alt="...">
+            </center>
+            <div class="card-body text-center">
+              <h4 class="card-title mb-0">Best Ratio</h4>
+              <div class="card-text text-black-50">{{ superlative_members.best_ratio_user.nickname }} with an average of {{ "%.2f"|format(superlative_members.best_ratio_user.ratio)}} likes/comment</div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Team Member 1 -->
+        <div class="col-xs-12 col-s-12 col-md-6 col-lg-4">
+          <div class="card border-0 shadow">
+            <center>
+              <img class="group-img" src={{superlative_members.most_liked_user.url}}  alt="...">
+            </center>
+            <div class="card-body text-center">
+              <h4 class="card-title mb-0">Most Likes Received</h4>
+              <div class="card-text text-black-50">{{ superlative_members.most_liked_user.nickname }} with {{ superlative_members.most_liked_user.num_likes | numberFormat }} likes received</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-s-12 col-md-6 col-lg-4">
+          <div class="card border-0 shadow">
+            <center>
+              <img class="group-img" src={{superlative_members.most_likes_given_user.url}} alt="...">
+            </center>
+            <div class="card-body text-center">
+              <h4 class="card-title mb-0">Most Likes Given</h4>
+              <div class="card-text text-black-50">{{ superlative_members.most_likes_given_user.nickname }} with {{ superlative_members.most_likes_given_user.likes_given }} likes given</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Member 1 -->
+        <div class="col-xs-12 col-s-12 col-md-6 col-lg-4">
+          <div class="card border-0 shadow">
+            <center>
+              {% if (superlative_members.most_mentioned_user.times_mentioned == 0)%}
+              {% else %}
+              <img class="group-img" src={{superlative_members.most_mentioned_user.url}}></a>
+              {% endif %}
+            </center>
+            <div class="card-body text-center">
+              <h4 class="card-title mb-0">Most Times Mentioned</h4>
+              {% if (superlative_members.most_mentioned_user.times_mentioned == 1)%}
+              <div class="card-text text-black-50">{{ superlative_members.most_mentioned_user.nickname }} with {{ superlative_members.most_mentioned_user.times_mentioned }} mention</div>
+              {% elif (superlative_members.most_mentioned_user.times_mentioned == 0)%}
+              <div class="card-text text-black-50">No mentions!</div>
+              {% else %}
+              <div class="card-text text-black-50">{{ superlative_members.most_mentioned_user.nickname }} with {{ superlative_members.most_mentioned_user.times_mentioned }} mentions</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-s-12 col-md-6 col-lg-4">
+          <div class="card border-0 shadow">
+            <center>
+              {% if (superlative_members.most_self_likes_user.self_likes == 0)%}
+              {% else %}
+              <img class="group-img" src={{superlative_members.most_self_likes_user.url}}></a>
+              {% endif %}
+            </center>
+            <div class="card-body text-center">
+              <h4 class="card-title mb-0">Most Self Likes</h4>
+              {% if (superlative_members.most_self_likes_user.self_likes == 1)%}
+              <div class="card-text text-black-50">{{ superlative_members.most_self_likes_user.nickname }} with {{ superlative_members.most_self_likes_user.self_likes }} self like</div>
+              {% elif (superlative_members.most_self_likes_user.self_likes == 0)%}
+              <div class="card-text text-black-50">No self likes!</div>
+              {% else %}
+              <div class="card-text text-black-50">{{ superlative_members.most_self_likes_user.nickname }} with {{ superlative_members.most_self_likes_user.self_likes }} self likes</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+
+
 
     <div class="row">
       <div class="col-1"></div>
       <div class="col">
         <div class="well">
-          <center>
-            <u><h3>Chattiest Member</h3></u>
-            <img src={{superlative_members.chattiest_user.url}} width = 200px></a>
-            <center>
-              <h3>{{ superlative_members.chattiest_user.nickname }} with {{ superlative_members.chattiest_user.num_comments}} comments</h3>
-            </center>
-          </div>
-        </div>
-        <div class="col">
-          <div class="well">
-            <center>
-              <u><h3>Best Ratio</h3></u>
-              <img src={{superlative_members.best_ratio_user.url}} width = 200px></a>
+          <u><h3>Most Liked Message</h3></u>
+          {% if (best_msg_attchmnt == 1 and best_msg.message == None)%}
+          <h3><div> - {{ best_msg.messager }}</div></h3>
+          <center><img src= {{ best_msg.attachments[0].url }}  width=50%><center>
+            {% elif (best_msg_attchmnt == 1 and best_msg.message != None)%}
+            <h3><div>{{ best_msg.message }} </div></h3>
+            <h3><div> - {{ best_msg.messager }} </div></h3>
+            <center><img src= {{ best_msg.attachments[0].url }}  width=50%><center>
+              {% elif (best_msg_attchmnt == 2)%}
+              <h3><div> - {{ best_msg.messager }} </div></h3>
               <center>
-                <h3>{{ superlative_members.best_ratio_user.nickname }} with an average of {{ "%.2f"|format(superlative_members.best_ratio_user.ratio)}} likes/comment</h3>
-              </center>
-            </div>
-          </div>
-          <div class="col-1"></div>
-        </div>
-
-        <div class="row">
-          <div class="col-1"></div>
-          <div class="col">
-            <div class="well">
-              <center>
-                <u><h3>Most Likes Received</h3></u>
-                <img src={{superlative_members.most_liked_user.url}} width = 200px></a>
-                <center>
-                  <h3>{{ superlative_members.most_liked_user.nickname }} with {{ superlative_members.most_liked_user.num_likes}} likes received</h3>
-                </center>
-              </div>
-            </div>
-            <div class="col">
-              <div class="well">
-                <center>
-                  <u><h3>Most Likes Given</h3></u>
-                  <img src={{superlative_members.most_likes_given_user.url}} width = 200px></a>
+                <video autoplay  width=75%>
+                  <source src= {{ best_msg.attachments[0].url }}  type="video/mp4">
+                  </video>
                   <center>
-                    <h3>{{ superlative_members.most_likes_given_user.nickname }} with {{ superlative_members.most_likes_given_user.likes_given }} likes given</h3>
-                  </center>
-                </div>
-              </div>
-              <div class="col-1"></div>
-            </div>
-
-            <div class="row">
-              <div class="col-1"></div>
-              <div class="col">
-                <div class="well">
-                  <center>
-                    <u><h3>Most Times Mentioned</h3></u>
-                    <img src={{superlative_members.most_mentioned_user.url}} width = 200px></a>
-
-                    <center>
-                      {% if (superlative_members.most_mentioned_user.times_mentioned == 1)%}
-                      <h3>{{ superlative_members.most_mentioned_user.nickname  }} with {{ superlative_members.most_mentioned_user.times_mentioned }} mention</h3>
-                      {% elif (superlative_members.most_mentioned_user.times_mentioned == 0)%}
-                      <h3>No mentions!</h3>
-                      {% else %}
-                      <h3>{{ superlative_members.most_mentioned_user.nickname }} with {{ superlative_members.most_mentioned_user.times_mentioned}} mentions</h3>
-                      {% endif %}
-                    </center>
+                    {% else %}
+                    <h3><div>{{ best_msg.message }} </div></h3>
+                    <h3><div> - {{ best_msg.messager }} </div></h3>
+                    {% endif %}
                   </div>
                 </div>
-                <div class="col">
-                  <div class="well">
-                    <center>
-                      <u><h3>Most Self Likes</h3></u>
-                      <img src={{superlative_members.most_self_likes_user.url}} width = 200px></a>
+                <div class="col-1"></div>
+              </div>
 
-                      <center>
-                        {% if (superlative_members.most_self_likes_user.self_likes == 1)%}
-                        <h3>{{ superlative_members.most_self_likes_user.nickname }} with {{ superlative_members.most_self_likes_user.self_likes }} self like</h3>
-                        {% elif (superlative_members.most_self_likes_user.self_likes == 0)%}
-                        <h3>No self likes!</h3>
-                        {% else %}
-                        <h3>{{ superlative_members.most_self_likes_user.nickname }} with {{ superlative_members.most_self_likes_user.self_likes }} self likes</h3>
-                        {% endif %}
-                      </center>
-                    </div>
-                  </div>
-                  <div class="col-1"></div>
-                </div>
-
-                <div class="row">
-                  <div class="col-1"></div>
-                  <div class="col">
-                    <div class="well">
-                      <u><h3>Most Liked Message</h3></u>
-                      {% if (best_msg_attchmnt == 1 and best_msg.message == None)%}
-                      <h3><div> - {{ best_msg.messager }}</div></h3>
-                      <center><img src= {{ best_msg.attachments[0].url }}  width=50%><center>
-                        {% elif (best_msg_attchmnt == 1 and best_msg.message != None)%}
-                        <h3><div>{{ best_msg.message }} </div></h3>
-                        <h3><div> - {{ best_msg.messager }} </div></h3>
-                        <center><img src= {{ best_msg.attachments[0].url }}  width=50%><center>
-                          {% elif (best_msg_attchmnt == 2)%}
-                          <h3><div> - {{ best_msg.messager }} </div></h3>
-                          <center>
-                            <video autoplay>
-                              <source src= {{ best_msg.attachments[0].url }}  type="video/mp4">
-                              </video>
-                              <center>
-                                {% else %}
-                                <h3><div>{{ best_msg.message }} </div></h3>
-                                <h3><div> - {{ best_msg.messager }} </div></h3>
-                                {% endif %}
-                              </div>
-                            </div>
-                            <div class="col-1"></div>
-                          </div>
-
-                          <center><img src= {{ plot_url }} width =70%><center>
+              <center><img src= {{ plot_url }} width =70%><center>
 
 
 
-                            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-                            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+                <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 
-                          </div>
+              </div>
 
-                        </body>
-                        </html>
+            </body>
+            </html>

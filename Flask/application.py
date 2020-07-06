@@ -40,7 +40,11 @@ def base():
 
 @app.template_filter('ctime')
 def timectime(s):
-    return time.strftime("%A, %B %-m, %Y %-I:%M %p", time.localtime(s))
+    return time.strftime("%A, %B %-d, %Y %-I:%M %p", time.localtime(s))
+
+@app.template_filter()
+def numberFormat(value):
+    return format(int(value), ',d')
 
 @app.route('/groups_list')
 def list_groups():

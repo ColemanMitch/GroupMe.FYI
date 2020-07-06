@@ -161,8 +161,8 @@ def total_group_stats(df, df_members):
 
 
     total_user_likes = df['Number of Likes'].sum()
-    total_user_comments = df_avg_likes[~df_avg_likes['User ID'].isin(['calendar', 'system'])]['Comments Count'].sum()
-    df_avg_likes = df_avg_likes[~df_avg_likes['User ID'].isin(['calendar', 'system'])]
+    total_user_comments = df_avg_likes_merge[~df_avg_likes_merge['User ID'].isin(['calendar', 'system'])]['Comments Count'].sum()
+    df_avg_likes_merge = df_avg_likes_merge[~df_avg_likes_merge['User ID'].isin(['calendar', 'system'])]
     if df_avg_likes.empty: # off chance the group has no messages from the members
         total_stats  = {
                         'total_comments': 0,
@@ -174,7 +174,7 @@ def total_group_stats(df, df_members):
 
 
     num_participants = len((all_users_df))
-
+    df_avg_likes_merge  = df_avg_likes_merge[df_avg_likes_merge.Nickname != 'NaN']
     best_ratio_user = {'nickname': df_avg_likes_merge.iloc[0]['Nickname'], 'ratio': df_avg_likes_merge.iloc[0]['Average Likes/Comment'], 'url': df_avg_likes_merge.iloc[0]['User Avatar']}
     df_avg_likes_merge.sort_values(by=['Comments Count'], ascending=False, inplace=True)
     #print(df_avg_likes)
