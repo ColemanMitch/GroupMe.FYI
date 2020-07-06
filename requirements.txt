@@ -5,10 +5,12 @@ chardet==3.0.4
 Click==7.0
 cycler==0.10.0
 DateTime==4.3
+Django==3.0.5
 dnspython==1.16.0
 Flask==1.1.1
 Flask-SocketIO==4.2.1
 GroupyAPI==0.10.3
+gunicorn==20.0.4
 idna==2.7
 itsdangerous==1.1.0
 Jinja2==2.11.1
