@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">-->
+    <script src="https://kit.fontawesome.com/144a01e07b.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!--
+    <style>
+        .group-img {
+            object-fit: cover;
+            width: 280px;
+            height: 280px;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .title {
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            text-align: center;
+            width: 7000px;
+            color: #fff;
+        }
+
+        button {
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 30px;
+            color: #FFF;
+            background-color: #008CBA;
+        }
+
+        #wrapper {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        table,
+        th,
+        td {
+            max-width: 100%;
+            white-space: nowrap;
+            width: auto !important;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .group-row {
+            display: flex;
+            /* equal height of the children */
+            flex-wrap: wrap;
+        }
+    </style>-->
+
+    <style>
+        #download-button {
+            /*flex-direction: column;*/
+            justify-content: center;
+            width: 250px;
+            height: 35px;
+            text-align: center !important;
+            vertical-align: middle !important;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #FFF;
+            background-color: #008CBA;
+        }
+
+        #download-button:hover {
+            background-color: #016a8c;
+        }
+
+
+        .col-xl-4.col-md-6.mb-6,
+        .col-xl-4.col-md-12.mb-6 {
+            margin-bottom: 1.5rem !important;
+        }
+
+        footer {
+            background-color: #E3DFDF;
+        }
+    </style>
+</head>
+
+<body style="background-color:white">
+    <div>
+
+
+        <div class="jumbotron jumbotron-fluid" style="background-color:#5dbcd2" width=100%>
+            <div class="container" style="color:#5dbcd2">
+                <h1 class="display" style="text-align:center; color:#fff">GroupMe.FYI - {{ group_name }}</h1>
+            </div>
+        </div>
+
+        {% load humanize %}
+        <!-- Content Row -->
+        <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the total number of message sent by users and the system in the group">
+                                    Total Messages</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_messages|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-comments fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the total number of message sent by users in the group">
+                                    Total User Messages</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{total_user_messages|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the total number of likes given by users in the group">
+                                    Total Likes</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{total_likes|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-heart fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the average number of likes per user message in the group">
+                                    Average Likes/User Message</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    {{avg_likes_user_comment|floatformat:2 }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-thumbs-up fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the date when the group was created">
+                                    Date Created</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ date_created | date:'F j, Y' }}
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar-day fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the total number of self-liked messages in the group">
+                                    Total Self-Likes</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{total_self_likes|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-hand-point-left fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total # of Mentions in Group  -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the total number of mentions in the group">
+                                    Total Mentions</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{total_mentions|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-at fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- # of Messages w/ the Most # of Likes -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the total number of messages that have received the most likes in this group as well as the number of likes those messages received">
+                                    Most Liked Message(s)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    {{most_likes_message_cnt}} with {{most_likes_message}} likes</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-crown fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!-- Most Messages Sent User -->
+            <div class="col-xl-4 col-md-12 mb-6">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the user that has sent the most messages in the group">
+                                    Most Talkative</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{most_talkative.user_name}} with
+                                    {{ most_talkative.num_messages|intcomma}} messages</div>
+                            </div>
+                            <div class="col-auto">
+                                {% if most_talkative.user_name == "GroupMe" %}
+                                <img src="/static/images/groupme-logo.png" height="70px">
+                                {% else %}
+                                <img src="{{most_talkative.avatar_url}}" height="70px">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Most Likes Received Group Member -->
+            <div class="col-xl-4 col-md-12 mb-6">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the user that has received the most likes in the group">
+                                    Most Beloved</div>
+                                    {% if most_beloved.num_likes >= 2%}
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{most_beloved.user_name}} with
+                                    {{ most_beloved.num_likes|intcomma}} likes received</div>
+                                    {% elif most_beloved.num_likes == 1%}
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{most_beloved.user_name}} with
+                                        {{ most_beloved.num_likes|intcomma}} like received</div>
+                                    {% else %}
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">No likes received!</div>
+                                    {% endif %}
+                            </div>
+                            <div class="col-auto">
+                                {% if most_beloved.user_name == "GroupMe" %}
+                                <img src="/static/images/groupme-logo.png" height="70px">
+                                {% else %}
+                                <img src="{{most_beloved.avatar_url}}" height="70px">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Likes/Message Ratio Group Member -->
+            <div class="col-xl-4 col-md-12 mb-6">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the user that has the highest likes/message ratio in the group">
+                                    Best Ratio</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    {{best_ratio.user_name}} with {{best_ratio.ratio | floatformat:2 }} likes/message
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                {% if best_ratio.user_name == "GroupMe" %}
+                                <img src="/static/images/groupme-logo.png" height="70px">
+                                {% else %}
+                                <img src="{{best_ratio.avatar_url}}" height="70px">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-4 col-md-12 mb-6">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the user that has the most self-likes in the group">
+                                    Biggest Self-Promoter</div>
+                                    {% if self_promoter.self_likes >= 2 %}
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{self_promoter.user_name}} with
+                                    {{ self_promoter.self_likes}} self-likes</div>
+                                    {% elif self_promoter.self_likes == 2 %}
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{self_promoter.user_name}} with {{ self_promoter.self_likes}} self-like</div>
+                                    {%else%}
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">No self-likes!</div>
+                                    {%endif%}
+                            </div>
+                            <div class="col-auto">
+                                <img src="{{self_promoter.avatar_url}}" height="70px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Most Likes Given  -->
+            <div class="col-xl-4 col-md-12 mb-6">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the user that has given the most likes in the group">
+                                    Biggest Supporter</div>
+                                    {% if most_likes_given.likes_given >= 2 %}
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{most_likes_given.user_name}} with
+                                    {{ most_likes_given.likes_given|intcomma}} likes given</div>
+                                    {% elif most_likes_given.likes_given == 1 %}
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{most_likes_given.user_name}} with
+                                        {{ most_likes_given.likes_given|intcomma}} like given</div>
+                                        {% else %}
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">No likes given!</div>
+                                        {% endif %}
+                            </div>
+                            <div class="col-auto">
+                                <img src="{{most_likes_given.avatar_url}}" height="70px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Most Mentioned Group Member -->
+            <div class="col-xl-4 col-md-12 mb-6">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1" data-toggle="tooltip" data-placement="top" title="This represents the user that has been mentioned the most times in the group">
+                                    Most In Demand</div>
+                                {% if most_mentioned.times_mentioned >= 2 %}
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    {{most_mentioned.user_name}} with {{most_mentioned.times_mentioned}} mentions </div>
+                                {% elif most_mentioned.times_mentioned == 1 %}
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        {{most_mentioned.user_name}} with {{most_mentioned.times_mentioned}} mention </div>
+                                    {% else %}
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    No mentions!</div>
+                                {% endif %}
+                            </div>
+                        <div class="col-auto">
+                            {% if most_mentioned.times_mentioned >= 1%}
+                            <img src="{{most_mentioned.avatar_url}}" height="70px">
+                            {% else %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <hr>
+        <center><h3>Most Liked Messages</h3></center>
+        <table class="table table-borderless table-hover" style="margin-left:auto;margin-right:auto; width: 100%">
+            <tr>
+                <th class="col-xs-1">Time Stamp</th>
+                <th class="col-xs-2">Name</th>
+                <th class="col-xs-3">Text</th>
+                <th class="col-xs-4">Attachment</th>
+            <tr>
+
+                {% for i in most_liked_msgs_array%}
+            <tr>
+                <td class="col-xs-2" style="text-align:left;">{{i.timestamp }}</td>
+                <td class="col-xs-2" style="text-align:left;">{{i.name }}</td>
+                {% if i.text == None %}
+                <td class="col-xs-3" style="text-align:left;"></td>
+                {% else %}
+                <td class="col-xs-4" style="text-align:left;">{{i.text }}</td>
+                {% endif %}
+                {% if i.attachments.0.preview_url != None or "mp4" in i.text%}
+                <td class="col-xs-4" style="text-align:left;"><video controls="controls">
+                        <source src="{{i.text}}" type="video/mp4">
+                        </source></video></td>
+                {% elif i.attachments.0.type or i.attachments.0.type == "image" or i.attachments.0.type == "video" %}
+                <td class="col-xs-4" style="text-align:left;"><img src="{{i.attachments.0.url}}" width="200rem">
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+
+    <footer>
+        <center>
+            <hr>
+            <div id="footer-container">
+                <img id='gm-logo' src="/static/images/powered-by-groupme.png"><br>
+                <p>and made with Django by <a href="https://colemitchell.io">Cole Mitchell</a></p>
+
+
+                <button type="button" id="download-button" value={{j}} onclick="location.href='./download_data/'">
+                    Download your group's data
+                    <i height="20px" class="fas fa-download text-white-300"></i>
+                </button>
+            </div>
+        </center>
+    </footer>
+</body>
+<script>
+    $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+    });
+
+    let data = {{j|safe}};
+    console.log(data);
+    const items = Object.values(data)
+    const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
+    const header = Object.keys(data[0])
+    const csv = [
+        header.join(','), // header row first
+        ...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+    ].join('\r\n')
+
+    console.log(csv)
+</script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+</script>
+
+</html>

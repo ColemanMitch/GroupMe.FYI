@@ -1,0 +1,4 @@
+[console_scripts]
+tz_cli = tz.main:entry_point
+zdump = tz.zdump:entry_point
+

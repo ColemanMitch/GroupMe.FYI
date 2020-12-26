@@ -1,0 +1,33 @@
+Metadata-Version: 1.2
+Name: clowncar
+Version: 0.2.0
+Summary: Simple client side load balancing module.
+Home-page: https://github.com/gmjosack/clowncar
+Author: Gary M. Josack
+Author-email: gary@byoteki.com
+Maintainer: Gary M. Josack
+Maintainer-email: gary@byoteki.com
+License: MIT
+Download-URL: https://github.com/gmjosack/clowncar/archive/master.tar.gz
+Description: clowncar
+        ========
+        
+        Description
+        ~~~~~~~~~~~
+        
+        Library for simple client-side load balancing.
+        
+        Installation
+        ~~~~~~~~~~~~
+        
+        ::
+        
+            pip install clowncar
+        
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules

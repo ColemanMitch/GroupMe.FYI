@@ -1,0 +1,273 @@
+======
+Groupy
+======
+
+.. image:: https://img.shields.io/pypi/v/GroupyAPI.svg
+	:target: https://pypi.python.org/pypi/GroupyAPI
+
+.. image:: https://travis-ci.org/rhgrant10/Groupy.svg?branch=dev
+	:target: https://travis-ci.org/rhgrant10/Groupy
+
+.. image:: https://readthedocs.org/projects/groupy/badge/?version=latest
+	:target: https://groupy.readthedocs.org/en/latest
+
+The simple yet powerful GroupMe API wrapper for Python.
+
+ - `Full Documentation`_
+     - `Installation`_
+     - `Basic Usage`_
+     - `Contributing`_
+
+.. _Full Documentation: http://groupy.readthedocs.org/en/latest/
+.. _Installation: http://groupy.readthedocs.org/en/latest/pages/installation.html
+.. _Basic Usage: http://groupy.readthedocs.org/en/latest/pages/quickstart.html
+.. _Contributing: http://groupy.readthedocs.org/en/latest/pages/contributing.html
+
+
+==========
+Change Log
+==========
+
+v0.10.3 (January 1, 2019)
+=========================
+
+- fix issue with file attachments as image attachments in the gallery (thanks to Bryce Corbitt)
+- bump requests dependency to ``~=2.20.0`` (CVE-2018-18074)
+
+v0.10.2 (October 3, 2018)
+=========================
+
+- fix incorrect return type in the documentation for Message methods (thanks to Zach Hardesty)
+
+v0.10.1 (July 10, 2018)
+=======================
+
+- allow missing fields in ``Mention`` objects in support of very old message attachments
+- update documentation to warn users of HTTP 429 responses when creating chat messages with non-application API tokens
+- update development status to Production/Stable in ``setup.py``
+
+v0.10.0 (June 4, 2018)
+======================
+
+- fix image attachment creation
+- support pickling/unpickling of ``Resource`` objects
+
+v0.9.2 (December 23, 2017)
+==========================
+
+- fix travis CD
+
+v0.9.0 (December 23, 2017)
+==========================
+
+- add ``Block`` equality by ``user_id`` and ``blocked_user_id``
+- add ``Bot`` equality by ``bot_id``
+- add ``Message`` equality by ``id``
+- add ``Member`` equality by ``id``
+- add ``Group`` equality by ``group_id``
+
+v0.8.1 (December 19, 2017)
+==========================
+
+- fix bug when converting stange/invalid timestamps to datetimes
+- add missing ``created_at`` and ``updated_at`` in ``Chat`` resources
+
+v0.8.0 (December 15, 2017)
+==========================
+
+This version represents a significant, backwards-incompatible change! The old
+API was brittle, poorly designed, and very difficult to test.
+
+- No more global api key; create clients using a specific api key instead
+- Added missing group functionality:
+	- joining with a share token
+	- rejoining a former group
+	- changing group ownership
+- Added additional endpoints:
+	- leaderboard
+	- blocks
+- Reverse engineered the undocumented gallery endpoint
+	- has all known supported listing methods
+	- supports before, after, and since with UTC ``datetime`` s
+- Added paging control for endpoints that support it
+- Message paging now maintains the order in which they come from the API:
+	- "before" messages go back in time
+	- "after" messages go forward in time
+- much more grandular exceptions and no layer violations
+- removal of Pillow depenedency for images; simply upload/download image bytes and do with them as you please
+- result filtering has been moved and improved
+	- can now make and reuse a filter
+	- can create arbitrary sets of tests and use them in a filter
+- now uses the Apache license instead of GPLv3
+
+
+v0.7.1 (March 29, 2017)
+=======================
+
+- Fixed an issue serializing attachments posted by the user (not a bot) (thanks to a-vilmin for reporting the issue)
+
+
+v0.7.0 (November 19, 2016)
+==========================
+
+- Fixed an issue with attachments not being serializable. Now an attempt to call their ``as_dict`` method is made (thank you to awctomlinson for pointing it out)
+- Fixed problem with ``is_liked_by_me``, ``is_from_me`` and ``metions_me`` when used on ``DirectMessages`` (thank you to mmigrate)
+- Added attachment support to ``Bot``'s ``post`` method (thank you again to mmigrate)
+- Fixed a mispelling in the ``mentions_me`` method name (thank you adelq)
+
+v0.6.6 (April 23, 2016)
+=======================
+
+- Fixed a typo in the docs regarding the type of the ``group`` parameter of the ``Bot`` class (kudos to JCDJulian)
+- Fixed the ``Group.update`` method signature to include the ``group_id`` (kudos to mmirate)
+- Fixed ``Member.identification`` such that it uses ``Member.guid`` rather than ``Member._guid`` (kudos to mmirate)
+- Fixed the uncaught exception chain that occurred when a 304 was returned in ``Recipient.messages`` (thanks to dvmorris and sbonds for pointing it out)
+- Updated the list of contributors
+
+v0.6.5 (January 17, 2016)
+=========================
+
+- Fixed typo the ``Bot`` class that caused the bots to have a "gorup_id" (kudos to JCDJulian)
+- All modules except ``object/listers.py`` and ``object/responses.py`` now have full test coverage
+- Updated AUTHORS.rst with all contributors to date (feel free to PR with an email address added to your username)
+- Fixed leftover markdown formatting in the CHANGELOG.rst file
+
+v0.6.4 (December 31, 2015)
+==========================
+
+- Fixed bugs with creating bots (kudos to qlyoung)
+- Fixed bugs with posting messages as bots (kudos again to qlyoung)
+- Fixed typo bugs in ``Group`` class (kudos to t3zla)
+- Fixed missing Python 3 trove classifier
+- Added documentation for contributions
+- Updated documentation for setup and installation
+- Added a couple more unit tests
+- Reconfigured tox test results to not clobber results from other environments
+
+v0.6.3 (December 23, 2015)
+==========================
+
+- Added support for ``tox`` (envs py34,py35)
+- Added support for ``bumpversion``
+- Added ``make`` file for handy development
+- Moved to ``nosetests`` and ``coverage``
+- Split requirements into regular and testing
+- Updated some of the installation/troubleshooting docs
+- Merged in open pull-requests for various oversights (kudos to ScufyfNrdHrdr, rAntonioH, and JacobAMason)
+
+v0.6.2 (May 3, 2015)
+====================
+
+- Fixed problem when posting messages as a bot
+- Added ``refresh`` option for automatically updating group information after addition/removal of members
+- Updated documentation
+
+v0.6.1 (April 25, 2015)
+=======================
+
+- Fixed code in ``responses.py`` that was still using the old exception class name
+- Changed the ``Member.remove()`` method to correctly use the ``id`` of the member rather than the ``user_id``
+- Slight beefing up of some documentation
+
+v0.5.8 (December 9, 2014)
+=========================
+
+- Fixed problems with ``requirements.txt`` and ``setup.py`` that caused problems installing from ``pip``
+- Re-wrote many of the unittests (still in progress)
+- Added Travis-CI and PyPI badges to the readme
+- Bumped requirement for dropbox's ``responses`` to 0.3.0
+- Now uses ``setup`` from ``setuptools`` rather than ``distutils.core``
+
+v0.5.3 (September 19, 2014)
+===========================
+
+- Fix packaging bug that caused inner packages to not be installed via ``pip3``
+
+v0.5.2 (September 14, 2014)
+===========================
+
+- Now installable via ``pip3``:
+
+    .. code-block:: console
+
+        $ pip3 install GroupyAPI
+
+
+v0.5.1 (August 25, 2014)
+========================
+
+*Groups*
+
+- Added a class method for creating a new group
+- Added an instance method for destroying a group
+
+*Members*
+
+- Fixed member identification on dictionaries
+
+*User*
+
+- Fixed the enable/disable SMS methods (now class methods as they should be)
+
+*Documentation*
+
+- Added some module docstrings
+- Added API docs for all attachment classes
+- Added docs for split attachments
+- Moved FilterList docs into the Advanced Usage section
+- Rewrote API docs for enabling SMS mode
+- Fixed bad sphinx references
+- Fixed typos
+- Added miscellaneous sections to the README
+- Updated feature list
+
+v0.5.0 (August 20, 2014)
+========================
+
+- Added support for downloaded the image of an image attachment
+- Reorganized modules and project structure
+- Updated documentation
+
+v0.4.0 (August 18, 2014)
+========================
+
+- Added ability to list all known members
+- Re-wrote attachments classes
+
+v0.3.1 (August 14, 2014)
+========================
+
+- Fixed bug when adding members to a group
+- Many additions to the documentation
+
+v0.3.0 (August 12, 2014)
+========================
+
+- Added post and messages methods to members
+- Added after_id parameter for direct messages
+- Fixed liking and unliking direct messages
+- Fixed listing former groups
+- Fixed group lists being limited to a max of 500 items
+- Documentation now available on `Read the Docs`_!
+
+v0.2.0 (August 11, 2014)
+========================
+
+- Added MessagePager class for returning lists of messages
+
+v0.1.3 (August 10, 2014)
+========================
+
+- Added attachment class
+- Added basic documentation
+- Fixed the automatic splitting of long texts
+- Fixed invalid response error issue
+
+v0.1.0 (August 9, 2014)
+=======================
+
+- Initial release
+
+.. _Read the Docs: http://groupy.readthedocs.org/en/latest
+
+

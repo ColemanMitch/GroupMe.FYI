@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--
+  <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>-->
+  <link rel="stylesheet" type="text/css" href="../static/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://kit.fontawesome.com/144a01e07b.js" crossorigin="anonymous"></script>
+
+  <style>
+    footer,
+    #footer-container {
+      background-color: #E3DFDF;
+    }
+
+    hr,
+    #footer-container,
+    #signature {
+      margin-bottom: 0 !important;
+    }
+
+    #auth-button {
+      /*flex-direction: column;*/
+      justify-content: center;
+      width: 250px;
+      height: 35px;
+      text-align: center !important;
+      vertical-align: middle !important;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #FFF;
+      background-color: #008CBA;
+      margin-bottom: 1rem;
+    }
+
+    #auth-button:hover {
+      background-color: #016a8c;
+    }
+
+    #card-container {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    #test-container {
+      display: flex !important;
+      flex-direction: column !important;
+      margin-bottom: 1.5rem;
+      align-items: top !important;
+    }
+
+    .desc-card {
+      margin-bottom: 1.5rem;
+    }
+
+    span.carousel-control-next-icon, span.carousel-control-prev-icon {
+      background-color:rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .carousel-inner {
+      /*vertical-align: top;*/
+      border-style: solid;
+      border-width: 1px;
+      border-color: rgba(0, 0, 0, 0.15);
+    }
+
+    #test-container.col-md-8.mb-12{
+      align-items: top !important;
+    }
+
+    h5 {
+      margin-bottom: 0 !important;
+      
+    }
+
+    .carousel-caption {
+      vertical-align: bottom !important;
+      margin-bottom: 0 !important;
+      bottom: 0 !important;
+      padding-bottom: 0 !important;
+      background-color: rgba(255, 255, 255, 0.767);
+    }
+
+    
+  </style>
+</head>
+
+<body style="background-color:white">
+  <div class="jumbotron jumbotron-fluid" style="background-color:#5dbcd2" width=100%>
+    <div class="container" style="color:#5dbcd2">
+      <h1 class="display" style="text-align:center; color:#fff">GroupMe.FYI</h1>
+    </div>
+  </div>
+  <!--
+  <div id="carousel-container" class="col-md-12 mb-12">
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="/static/images/la.jpg" class="w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="/static/images/chicago.jpg" class="w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="/static/images/ny.jpg" class="w-100" alt="...">
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </div>-->
+<div class="row mb-12">
+  <div id="card-container" class="col-md-4 mb-12">
+    <div class="desc-card">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                Explore the data of your favorite GroupMe chats!</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-search fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="desc-card">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                Discover stats like who sends the most messages and who receives the most likes!</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-thumbs-up fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="desc-card">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                Get started by clicking the button below!</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-arrow-down fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <center>
+      <form>
+        <button id="auth-button"
+          formaction="https://oauth.groupme.com/oauth/authorize?client_id=QPxdELJCSu9MceJ1x8xFac9SKhfYV93Kv8hn7Jwtp57AhRQE">Analyze
+          your groups now!</button>
+      </form>
+    </center>
+</div>
+  <div id="test-container" class="col-md-8 mb-12">
+    <div id="carousel-container">
+      <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="/static/images/auth.png" class="w-100" alt="...">
+            <div class="carousel-caption">
+              <h5 style="color:black; background-color: white;">Simply login with your GroupMe credentials!</h5>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="/static/images/groups.png" class="w-100" alt="...">
+            <div class="carousel-caption">
+              <h5 style="color:black; background-color: white;">Select from any of your GroupMe groups!</h5>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="/static/images/analyze.png" class="w-100" alt="...">
+            <div class="carousel-caption">
+              <h5 style="color:black; background-color: white">Uncover more insights about your groups!</h5>
+            </div>
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+  <div id="footer-container"></div>
+  <footer>
+    <img id="gm-logo" src="/static/images/powered-by-groupme.png"><br>
+    <p id="signature">and made with Django by <a href="https://colemitchell.io">Cole Mitchell</a></p>
+  </footer>
+  </div>
+
+</body>
+
+</html>

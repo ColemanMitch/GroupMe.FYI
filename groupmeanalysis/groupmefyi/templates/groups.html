@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+        Bootstrap CSS 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    
+    </head>
+
+
+
+<body style="background-color:white">
+
+    <div class="jumbotron jumbotron-fluid" style="background-color:#5dbcd2" width=100%>
+        <div class="container" style="color:#5dbcd2" width=100%>
+            <h1 class="display" style="text-align:center; color:#fff">GroupMe.FYI</h1>
+        </div>
+    </div>
+
+    <center>
+        <div>
+            <table class="table table-borderless table-hover" style="margin-left:auto;margin-right:auto; width: 100%">
+                <tr>
+                    <th style="text-align:left;" class="col-xs-4 col-sm-1"> </th>
+                    <th style="text-align:left;" class="col-xs-4 col-sm-2"> Group Name</th>
+                    <th style="text-align:left;" class="col-sm-4 thide"> Most Recent Message </th>
+                    <th style="text-align:left;" class="col-sm-2 thide"> Last Updated</th>
+                    <th style="text-align:center;" class="col-xs-1 thide">Message Count</th>
+                    <th style="text-align:left;" class="col-xs-4"></th>
+                    <th> </th>
+                </tr>
+                <!-- {% for i in group_details%}
+                <tr>
+                    {% if i.image_url%}
+                    <td> &nbsp; <img src={{ i.image_url }} height=80px></td>
+                    {% else %}
+                    <td> &nbsp; <img src=../static/images/groupme-group.png height=80px></td>
+                    {% endif %}
+                    <td style="text-align:left;max-width:175px"><b>{{i.name }}</b></td>
+                    <td style="text-align:left;max-width: 400px;word-wrap: break-word;" align=right>
+                        {{ i.messages.preview.text }} </td>
+                    <td style="text-align:left;min-width:275px;word-wrap: break-word;">
+                        {{ i.messages.last_message_created_at|date:"l, F j, Y g:i A"}}</td>
+                    <td style="text-align:center;min-width:75px;word-wrap: break-word;"> {{ i.messages.count }}</td>
+                    <center>
+                        <td><button type="button" class="analyze-button" onclick="location.href='../analyze/access_token={{token}}/group_id={{i.group_id}}/group_name={{i.name}}/'" id="btnFetch" class="btn btn-primary mb-2" >Analyze Group</button></href></td>
+                </tr> 
+                {% endfor %} -->
+                {% load humanize %}
+                {% for i in group_details%}
+                <tr>
+                    {% if i.image_url%}
+                    <td class="col-xs-4 col-md-1"> &nbsp; <img src={{ i.image_url }} height=80px></td>
+                    {% else %}
+                    <td class="col-xs-4 col-md-1"> &nbsp; <img src=../static/images/groupme-group.png height=80px></td>
+                    {% endif %}
+                    <td class="col-xs-4 col-md-2" style="text-align:left;"><b>{{i.name }}</b></td>
+                    <td class="col-xs-4 thide" style="text-align:left;word-wrap: break-word;" align=right>
+                        {{ i.messages.preview.text }} </td>
+                    <td class="col-xs-2 thide" style="text-align:left;word-wrap: break-word;">
+                        {{ i.messages.last_message_created_at|date:"l, F j, Y"}}</td>
+                    <td class="col-xs-1 thide" style="text-align:center;word-wrap: break-word;"> {{ i.messages.count|intcomma}}
+                    </td>
+                    <center>
+                        <td class="col-xs-4"><button type="button" class="analyze-button"
+                                onclick="location.href='../analyze/access_token={{token}}/group_id={{i.group_id}}/group_name={{i.name}}/'"
+                                id="btnFetch" class="btn btn-primary mb-2">Analyze Group</button></href>
+                        </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </center>
+    <script>
+        $(document).ready(function () {
+            $("button").click(function () {
+                // disable button
+                $(this).prop("disabled", true);
+                // add spinner to button
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+                );
+            });
+        });
+
+        // disable button
+    </script>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" </html>
